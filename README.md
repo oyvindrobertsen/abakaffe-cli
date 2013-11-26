@@ -1,4 +1,4 @@
-# CLI-klient for [kaffe.abakus.no](http://kaffe.abakus.no)
+# CLI for [kaffe.abakus.no](http://kaffe.abakus.no)
 
 ## Installasjon
 
