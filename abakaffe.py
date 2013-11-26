@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: latin-1 -*-
 import urllib2
 import simplejson

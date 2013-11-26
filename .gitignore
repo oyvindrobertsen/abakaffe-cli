@@ -1,6 +1,5 @@
 venv/
-.abakaffe.sh.un~
-.abakaffe.py.un~
-.abakaffe.py.swp
-.gitignore.swp
-..gitignore.un~
+
+*~
+*.swp
+*.swo
