@@ -7,6 +7,16 @@ import sys
 from urlparse import urljoin
 from datetime import datetime
 
+ASCII_ART = '''
+           _           _          __  __     
+     /\   | |         | |        / _|/ _|    
+    /  \  | |__   __ _| | ____ _| |_| |_ ___ 
+   / /\ \ | '_ \ / _` | |/ / _` |  _|  _/ _ \\
+  / ____ \| |_) | (_| |   < (_| | | | ||  __/
+ /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|                                             
+'''
+
+
 API_URL = "http://kaffe.abakus.no/api/"
 
 
@@ -26,6 +36,8 @@ def main():
 
     last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
     time_delta = datetime.now() - last_start
+    
+    print(ASCII_ART)
 
     if on:
         print("Kaffetrakteren er på!")
