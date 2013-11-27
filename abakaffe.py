@@ -10,7 +10,8 @@ from datetime import datetime
 API_URL = "http://kaffe.abakus.no/api/"
 
 
-def get_json(url):
+def get_json(api_module):
+    url = urljoin(API_URL, api_module)
     req = urllib2.Request(url)
     opener = urllib2.build_opener()
     f = opener.open(req)
@@ -18,7 +19,7 @@ def get_json(url):
 
 
 def main():
-    status_json = get_json(urljoin(API_URL, "status"))
+    status_json = get_json('status')
     coffee = status_json['coffee']
     on = coffee['status']
     last_start = coffee['last_start']
@@ -37,11 +38,11 @@ def main():
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if len(sys.argv) > 1 and sys.argv[1] == "stats":
-        stats_json = get_json(urljoin(API_URL, "stats"))
+        stats_json = get_json("stats")
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
-            print(date + " |" + (int(value) * "#") + " " + value)
+            print("%s |%s %s" % (date, int(value) * "#", value))
 
 
 if __name__ == '__main__':
