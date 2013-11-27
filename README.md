@@ -10,6 +10,7 @@ Dersom du installerer dependencies globalt kan du flytte skriptet til /usr/bin/ 
 
 ## Eksempel
 
+    $ python abakaffe.py stats
     Traktern er på
     Kaffe ble sist traktet for 0 timer siden, 34 minutter siden.
     2013-11-26 |###
