@@ -3,9 +3,9 @@
 from __future__ import print_function
 import urllib2
 import simplejson
-import sys
 from urlparse import urljoin
 from datetime import datetime
+from argparse import ArgumentParser
 
 ASCII_ART = '''
            _           _          __  __     
@@ -28,14 +28,28 @@ def get_json(api_module):
     return simplejson.load(f)
 
 
+def get_args():
+    parser = ArgumentParser(description="When was the coffee brewed?")
+    parser.add_argument('-a', '--ascii', action='store_true', default=False,
+                        dest='ascii', help='prints the Abakaffe ascii-art')
+    parser.add_argument('-s', '--stats', action='store_true', default=False,
+                        dest='stats',
+                        help="prints a graph displaying Abakus' coffee\
+                              consumption")
+    return parser.parse_args()
+
+
 def main():
+    args = get_args()
     status_json = get_json('status')
     coffee = status_json['coffee']
     on = coffee['status']
     last_start = coffee['last_start']
     last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
     time_delta = datetime.now() - last_start
-    print(ASCII_ART)
+
+    if args.ascii:
+        print(ASCII_ART)
 
     if on:
         print("Kaffetrakteren er på!")
@@ -48,12 +62,13 @@ def main():
                (time_delta.seconds // 60) % 60))
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
-    if len(sys.argv) > 1 and sys.argv[1] == "stats":
+    if args.stats:
         stats_json = get_json("stats")
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
             print("%s |%s %s" % (date, int(value) * "#", value))
+            # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
 
 
 if __name__ == '__main__':
