@@ -23,28 +23,17 @@ def main():
     on = coffee['status']
     last_start = coffee['last_start']
 
-    last_start = coffee['last_start']
-    last_start = last_start.split(' ')
-    last_start_date = last_start[0]
-    last_start_time = last_start[1]
-    last_start_date = last_start_date.split('-')
-    last_start_time = last_start_time.split(':')
-    dt = datetime(int(last_start_date[0]), int(last_start_date[1]),
-                  int(last_start_date[2]), int(last_start_time[0]),
-                  int(last_start_time[1]))
-
-    delta = datetime.now() - dt
-
-    hours, minutes, seconds = str(delta).split(':')
+    last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
+    time_delta = datetime.now() - last_start
 
     if on:
         print("Kaffetrakteren er på!")
 
-    if int(hours) > 23:
+    if int(time_delta.days):
         print("Det er ingen som har traktet kaffe i dag.")
     else:
-        print("Kaffe ble sist traktet for " + hours + " timer siden, " + minutes
-          + " minutter siden.")
+        print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
+              (time_delta.seconds // (60 * 60), time_delta.seconds // (60)))
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if len(sys.argv) > 1 and sys.argv[1] == "stats":
