@@ -44,7 +44,8 @@ def main():
         print("Det er ingen som har traktet kaffe i dag.")
     else:
         print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
-              (time_delta.seconds // (60 * 60), time_delta.seconds // (60) % 60))
+              (time_delta.seconds // (60 * 60),
+               (time_delta.seconds // 60) % 60))
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if len(sys.argv) > 1 and sys.argv[1] == "stats":
