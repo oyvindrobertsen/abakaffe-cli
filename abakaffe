@@ -53,7 +53,7 @@ def main():
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
-            print("%s |%s %s" % (date, int(value) * "#", value))
+            print("%s |%s %s" % (date, int(value) * "▇", value))
 
 
 if __name__ == '__main__':
