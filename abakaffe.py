@@ -40,7 +40,10 @@ def main():
     if on:
         print("Kaffetrakteren er på!")
 
-    print("Kaffe ble sist traktet for " + hours + " timer siden, " + minutes
+    if int(hours) > 23:
+        print("Det er ingen som har traktet kaffe i dag.")
+    else:
+        print("Kaffe ble sist traktet for " + hours + " timer siden, " + minutes
           + " minutter siden.")
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
@@ -49,7 +52,7 @@ def main():
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
-            print(date + " |" + (int(value) * "#"))
+            print(date + " |" + (int(value) * "#") + " " + value)
 
 
 if __name__ == '__main__':
