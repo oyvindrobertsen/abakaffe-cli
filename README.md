@@ -2,15 +2,13 @@
 
 ## Installasjon
 
-    git clone https://github.com/oyvindrobertsen/abakaffe-cli
-    cd abakaffe-cli
-    pip install -r requirements.txt
+    pip install abakaffe-cli 
 
-Dersom du installerer dependencies globalt kan du flytte skriptet til /usr/bin/ og kjøre det med abakaffe
+Mest sannsynlig har du lyst å skrive sudo foran den linja.
 
 ## Eksempel
 
-    $ python abakaffe.py stats
+    $ abakaffe stats
               _           _          __  __
         /\   | |         | |        / _|/ _|
        /  \  | |__   __ _| | ____ _| |_| |_ ___
