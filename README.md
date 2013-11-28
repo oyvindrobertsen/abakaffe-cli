@@ -27,7 +27,7 @@ Mest sannsynlig har du lyst å skrive sudo foran den linja.
 ## Hvilke valg har jeg?
 
     $ abakaffe --help
-    usage: abakaffe-cli [-h] [-a] [-s] [-o] [--version]
+    usage: abakaffe-cli [-h] [-a] [-s] [-o] [-v]
 
     When was the coffee brewed?
 
@@ -36,4 +36,4 @@ Mest sannsynlig har du lyst å skrive sudo foran den linja.
       -a, --ascii   prints the Abakaffe ascii-art
       -s, --stats   prints a graph displaying Abakus' coffee consumption
       -o, --online  should I go one floor down to Online?
-      --version     prints the abakaffe-cli version number
+      -v, --version prints the abakaffe-cli version number
