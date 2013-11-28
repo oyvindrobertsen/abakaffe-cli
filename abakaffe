@@ -27,32 +27,34 @@ def get_version():
     return version
 
 
-def get_json(api_module):
-    url = urljoin(API_URL, api_module)
+def get_file(api_base, api_module):
+    url = urljoin(api_base, api_module)
     req = urllib2.Request(url)
     opener = urllib2.build_opener()
     f = opener.open(req)
-    return simplejson.load(f)
+    return f
+
+
+def print_status(time_delta, organisation="Abakus"):
+    if int(time_delta.days):
+        print("Ingen i %d har traktet kaffe i dag." % organisation)
+    else:
+        print("%s sin kaffe ble sist traktet for %d timer og %d minutter "
+              "siden." %
+              (organisation,
+               time_delta.seconds // (60 * 60),
+               (time_delta.seconds // 60) % 60))
 
 
 def online():
-    URL = "http://draug.online.ntnu.no/coffee.txt"
-    req = urllib2.Request(URL)
-    opener = urllib2.build_opener()
-    f = opener.open(req)
+    URL = "http://draug.online.ntnu.no/"
+    f = get_file(URL, "coffee.txt")
+
     f.readline()
     last_start = f.readline()
-
     last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
     time_delta = datetime.now() - last_start
-
-    if int(time_delta.days):
-        print("Online har ikke traktet kaffe i dag.")
-    else:
-        print("Online sin kaffe ble sist traktet for %d timer og %d minutter "
-              "siden." %
-              (time_delta.seconds // (60 * 60),
-               (time_delta.seconds // 60) % 60))
+    print_status(time_delta)
 
 
 def get_args():
@@ -76,7 +78,8 @@ def get_args():
 
 def main():
     args = get_args()
-    status_json = get_json('status')
+    f = get_file(API_URL, 'status')
+    status_json = simplejson.load(f)
     coffee = status_json['coffee']
     on = coffee['status']
     last_start = coffee['last_start']
@@ -89,19 +92,14 @@ def main():
     if on:
         print("Kaffetrakteren er på!")
 
-    if int(time_delta.days):
-        print("Det er ingen som har traktet kaffe i dag.")
-    else:
-        print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
-              (time_delta.seconds // (60 * 60),
-               (time_delta.seconds // 60) % 60))
+    print_status(time_delta)
 
     if args.online:
         online()
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if args.stats:
-        stats_json = get_json("stats")
+        stats_json = simplejson(get_file(API_URL, "stats"))
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
