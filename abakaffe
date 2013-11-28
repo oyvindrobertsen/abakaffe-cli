@@ -22,9 +22,8 @@ API_URL = "http://kaffe.abakus.no/api/"
 
 
 def get_version():
-    f = open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r')
-    version = f.read()
-    f.close()
+    with open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r') as f:
+        version = f.read()
     return version
 
 
