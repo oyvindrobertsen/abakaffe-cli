@@ -27,34 +27,6 @@ def get_version():
     return version
 
 
-def get_json(api_module):
-    url = urljoin(API_URL, api_module)
-    req = urllib2.Request(url)
-    opener = urllib2.build_opener()
-    f = opener.open(req)
-    return simplejson.load(f)
-
-
-def online():
-    URL = "http://draug.online.ntnu.no/coffee.txt"
-    req = urllib2.Request(URL)
-    opener = urllib2.build_opener()
-    f = opener.open(req)
-    f.readline()
-    last_start = f.readline()
-
-    last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
-    time_delta = datetime.now() - last_start
-
-    if int(time_delta.days):
-        print("Online har ikke traktet kaffe i dag.")
-    else:
-        print("Online sin kaffe ble sist traktet for %d timer og %d minutter "
-              "siden." %
-              (time_delta.seconds // (60 * 60),
-               (time_delta.seconds // 60) % 60))
-
-
 def get_args():
     parser = ArgumentParser(description="When was the coffee brewed?",
                             prog='abakaffe-cli')
@@ -74,8 +46,35 @@ def get_args():
     return parser.parse_args()
 
 
-def main():
-    args = get_args()
+def get_json(api_module):
+    url = urljoin(API_URL, api_module)
+    req = urllib2.Request(url)
+    opener = urllib2.build_opener()
+    f = opener.open(req)
+    return simplejson.load(f)
+
+
+def online(args=None):
+    URL = "http://draug.online.ntnu.no/coffee.txt"
+    req = urllib2.Request(URL)
+    opener = urllib2.build_opener()
+    f = opener.open(req)
+    f.readline()
+    last_start = f.readline()
+
+    last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
+    time_delta = datetime.now() - last_start
+
+    if int(time_delta.days):
+        print("Online har ikke traktet kaffe i dag.")
+    else:
+        print("Online sin kaffe ble sist traktet for %d timer og %d minutter "
+              "siden." %
+              (time_delta.seconds // (60 * 60),
+               (time_delta.seconds // 60) % 60))
+
+
+def abakus(args=None):
     status_json = get_json('status')
     coffee = status_json['coffee']
     on = coffee['status']
@@ -95,10 +94,6 @@ def main():
         print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
               (time_delta.seconds // (60 * 60),
                (time_delta.seconds // 60) % 60))
-
-    if args.online:
-        online()
-
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if args.stats:
         stats_json = get_json("stats")
@@ -107,6 +102,15 @@ def main():
         for date, value in stats.iteritems():
             print("%s |%s %s" % (date, int(value) * "#", value))
             # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
+
+
+
+def main():
+    args = get_args()
+    if args.online:
+        online(args)
+    else:
+        abakus(args)
 
 
 if __name__ == '__main__':
