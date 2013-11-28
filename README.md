@@ -24,3 +24,16 @@ Mest sannsynlig har du lyst å skrive sudo foran den linja.
 
     Kaffe ble sist traktet for 4 timer og 58 minutter siden.
 
+## Hvilke valg har jeg?
+
+    $ abakaffe --help
+    usage: abakaffe-cli [-h] [-a] [-s] [-o] [--version]
+
+    When was the coffee brewed?
+
+    optional arguments:
+      -h, --help    show this help message and exit
+      -a, --ascii   prints the Abakaffe ascii-art
+      -s, --stats   prints a graph displaying Abakus' coffee consumption
+      -o, --online  should I go one floor down to Online?
+      --version     prints the abakaffe-cli version number
