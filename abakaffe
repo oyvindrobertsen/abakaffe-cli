@@ -78,7 +78,7 @@ def main():
         stats_json = get_json("stats")
         stats = stats_json['stats']
 
-        for date, value in stats.iteritems():
+        for date, value in sorted(stats.iteritems()):
             print("%s |%s %s" % (date, int(value) * "#", value))
             # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
 
