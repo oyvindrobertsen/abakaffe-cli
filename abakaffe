@@ -35,6 +35,26 @@ def get_json(api_module):
     return simplejson.load(f)
 
 
+def online():
+    URL = "http://draug.online.ntnu.no/coffee.txt"
+    req = urllib2.Request(URL)
+    opener = urllib2.build_opener()
+    f = opener.open(req)
+    f.readline()
+    last_start = f.readline()
+
+    last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
+    time_delta = datetime.now() - last_start
+
+    if int(time_delta.days):
+        print("Online har ikke traktet kaffe i dag.")
+    else:
+        print("Online sin kaffe ble sist traktet for %d timer og %d minutter "
+              "siden." %
+              (time_delta.seconds // (60 * 60),
+               (time_delta.seconds // 60) % 60))
+
+
 def get_args():
     parser = ArgumentParser(description="When was the coffee brewed?",
                             prog='abakaffe-cli')
@@ -42,12 +62,15 @@ def get_args():
                         dest='ascii', help='prints the Abakaffe ascii-art')
     parser.add_argument('-s', '--stats', action='store_true', default=False,
                         dest='stats',
-                        help="prints a graph displaying Abakus' coffee\
-                              consumption")
+                        help="prints a graph displaying Abakus' coffee "
+                             "consumption")
+    parser.add_argument('-o', '--online', action='store_true', default=False,
+                        dest='online',
+                        help="should I go one floor down to Online?")
     parser.add_argument('--version', action='version',
                         version='%(prog)s ' + get_version(),
-                        dest='version', help='prints the abakaffe-cli version\
-                                              number')
+                        dest='version', help='prints the abakaffe-cli version '
+                                             'number')
     return parser.parse_args()
 
 
@@ -72,6 +95,9 @@ def main():
         print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
               (time_delta.seconds // (60 * 60),
                (time_delta.seconds // 60) % 60))
+
+    if args.online:
+        online()
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if args.stats:
