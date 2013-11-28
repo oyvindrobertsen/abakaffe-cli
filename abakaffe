@@ -45,6 +45,32 @@ def print_status(time_delta, organisation="Abakus"):
                time_delta.seconds // (60 * 60),
                (time_delta.seconds // 60) % 60))
 
+def abakus(args=None):
+    f = get_file(API_URL, 'status')
+    status_json = simplejson.load(f)
+    coffee = status_json['coffee']
+    on = coffee['status']
+    last_start = coffee['last_start']
+    last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
+    time_delta = datetime.now() - last_start
+
+    if args.ascii:
+        print(ASCII_ART)
+
+    if on:
+        print("Kaffetrakteren er på!")
+
+    print_status(time_delta)
+    # Prints a beautiful graph displaying Abakus' coffee consumption problem
+    if args.stats:
+        f = get_file(API_URL, "stats")
+        stats_json = simplejson.load(f)
+        stats = stats_json['stats']
+
+        for date, value in stats.iteritems():
+            print("%s |%s %s" % (date, int(value) * "#", value))
+            # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
+
 
 def online():
     URL = "http://draug.online.ntnu.no/"
@@ -78,35 +104,9 @@ def get_args():
 
 def main():
     args = get_args()
-    f = get_file(API_URL, 'status')
-    status_json = simplejson.load(f)
-    coffee = status_json['coffee']
-    on = coffee['status']
-    last_start = coffee['last_start']
-    last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
-    time_delta = datetime.now() - last_start
-
-    if args.ascii:
-        print(ASCII_ART)
-
-    if on:
-        print("Kaffetrakteren er på!")
-
-    print_status(time_delta)
-
+    abakus(args)
     if args.online:
         online()
-
-    # Prints a beautiful graph displaying Abakus' coffee consumption problem
-    if args.stats:
-        f = get_file(API_URL, "stats")
-        stats_json = simplejson.load(f)
-        stats = stats_json['stats']
-
-        for date, value in stats.iteritems():
-            print("%s |%s %s" % (date, int(value) * "#", value))
-            # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
-
 
 if __name__ == '__main__':
     main()
