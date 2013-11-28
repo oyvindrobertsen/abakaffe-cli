@@ -21,6 +21,13 @@ ASCII_ART = '''
 API_URL = "http://kaffe.abakus.no/api/"
 
 
+def get_version():
+    f = open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r')
+    version = f.read()
+    f.close()
+    return version
+
+
 def get_json(api_module):
     url = urljoin(API_URL, api_module)
     req = urllib2.Request(url)
@@ -30,17 +37,16 @@ def get_json(api_module):
 
 
 def get_args():
-    f = open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r')
-    version = f.read()
-    f.close()
-    parser = ArgumentParser(description="When was the coffee brewed?", prog='abakaffe-cli')
+    parser = ArgumentParser(description="When was the coffee brewed?",
+                            prog='abakaffe-cli')
     parser.add_argument('-a', '--ascii', action='store_true', default=False,
                         dest='ascii', help='prints the Abakaffe ascii-art')
     parser.add_argument('-s', '--stats', action='store_true', default=False,
                         dest='stats',
                         help="prints a graph displaying Abakus' coffee\
                               consumption")
-    parser.add_argument('--version', action='version', version='%(prog)s ' + version,
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s ' + get_version(),
                         dest='version', help='print abakaffe version number')
     return parser.parse_args()
 
