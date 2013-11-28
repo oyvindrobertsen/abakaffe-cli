@@ -99,7 +99,8 @@ def main():
 
     # Prints a beautiful graph displaying Abakus' coffee consumption problem
     if args.stats:
-        stats_json = simplejson(get_file(API_URL, "stats"))
+        f = get_file(API_URL, "stats")
+        stats_json = simplejson.load(f)
         stats = stats_json['stats']
 
         for date, value in stats.iteritems():
