@@ -27,33 +27,27 @@ def get_version():
     return version
 
 
-def get_json(api_module):
-    url = urljoin(API_URL, api_module)
+def get_file(api_base, api_module):
+    url = urljoin(api_base, api_module)
     req = urllib2.Request(url)
     opener = urllib2.build_opener()
     f = opener.open(req)
-    return simplejson.load(f)
+    return f
 
 
-def get_args():
-    parser = ArgumentParser(description="When was the coffee brewed?",
-                            prog='abakaffe-cli')
-    parser.add_argument('-a', '--ascii', action='store_true', default=False,
-                        dest='ascii', help='prints the Abakaffe ascii-art')
-    parser.add_argument('-s', '--stats', action='store_true', default=False,
-                        dest='stats',
-                        help="prints a graph displaying Abakus' coffee\
-                              consumption")
-    parser.add_argument('--version', action='version',
-                        version='%(prog)s ' + get_version(),
-                        dest='version', help='prints the abakaffe-cli version\
-                                              number')
-    return parser.parse_args()
+def print_status(time_delta, organisation="Abakus"):
+    if int(time_delta.days):
+        print("Ingen i %d har traktet kaffe i dag." % organisation)
+    else:
+        print("%s sin kaffe ble sist traktet for %d timer og %d minutter "
+              "siden." %
+              (organisation,
+               time_delta.seconds // (60 * 60),
+               (time_delta.seconds // 60) % 60))
 
-
-def main():
-    args = get_args()
-    status_json = get_json('status')
+def abakus(args=None):
+    f = get_file(API_URL, 'status')
+    status_json = simplejson.load(f)
     coffee = status_json['coffee']
     on = coffee['status']
     last_start = coffee['last_start']
@@ -66,22 +60,56 @@ def main():
     if on:
         print("Kaffetrakteren er på!")
 
-    if int(time_delta.days):
-        print("Det er ingen som har traktet kaffe i dag.")
-    else:
-        print("Kaffe ble sist traktet for %d timer og %d minutter siden." %
-              (time_delta.seconds // (60 * 60),
-               (time_delta.seconds // 60) % 60))
+    print_status(time_delta)
 
-    # Prints a beautiful graph displaying Abakus' coffee consumption problem
+
+def abakus_stats():
+    f = get_file(API_URL, "stats")
+    stats_json = simplejson.load(f)
+    stats = stats_json['stats']
+
+    for date, value in sorted(stats.iteritems()):
+        print("%s |%s %s" % (date, int(value) * "#", value))
+        # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
+
+
+def online():
+    URL = "http://draug.online.ntnu.no/"
+    f = get_file(URL, "coffee.txt")
+
+    f.readline()
+    last_start = f.readline()
+    last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
+    time_delta = datetime.now() - last_start
+    print_status(time_delta, "Online")
+
+
+def get_args():
+    parser = ArgumentParser(description="When was the coffee brewed?",
+                            prog='abakaffe-cli')
+    parser.add_argument('-a', '--ascii', action='store_true', default=False,
+                        dest='ascii', help='prints the Abakaffe ascii-art')
+    parser.add_argument('-s', '--stats', action='store_true', default=False,
+                        dest='stats',
+                        help="prints a graph displaying Abakus' coffee "
+                             "consumption")
+    parser.add_argument('-o', '--online', action='store_true', default=False,
+                        dest='online',
+                        help="should I go one floor down to Online?")
+    parser.add_argument('-v', '--version', action='version',
+                        version='%(prog)s ' + get_version(),
+                        dest='version', help='prints the abakaffe-cli version '
+                                             'number')
+    return parser.parse_args()
+
+
+def main():
+    args = get_args()
+    abakus(args)
     if args.stats:
-        stats_json = get_json("stats")
-        stats = stats_json['stats']
-
-        for date, value in sorted(stats.iteritems()):
-            print("%s |%s %s" % (date, int(value) * "#", value))
-            # print("%s |%s %s" % (date, int(value) * u"\u2615", value))
-
+        abakus_stats()
+    if args.online:
+        online()
 
 if __name__ == '__main__':
     main()
