@@ -54,7 +54,7 @@ def online():
     last_start = f.readline()
     last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
     time_delta = datetime.now() - last_start
-    print_status(time_delta)
+    print_status(time_delta, "Online")
 
 
 def get_args():
