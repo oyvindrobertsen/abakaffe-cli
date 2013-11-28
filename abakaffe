@@ -64,7 +64,7 @@ def main():
         print(ASCII_ART)
 
     if on:
-        print("Kaffetrakteren er på!")
+        print("Kaffetrakteren er pÃ¥!")
 
     if int(time_delta.days):
         print("Det er ingen som har traktet kaffe i dag.")
