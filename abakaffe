@@ -47,7 +47,8 @@ def get_args():
                               consumption")
     parser.add_argument('--version', action='version',
                         version='%(prog)s ' + get_version(),
-                        dest='version', help='print abakaffe version number')
+                        dest='version', help='prints the abakaffe-cli version\
+                                              number')
     return parser.parse_args()
 
 
