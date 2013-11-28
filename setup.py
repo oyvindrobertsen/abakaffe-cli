@@ -5,7 +5,7 @@ import os
 with open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r') as f:
     version = f.read()
 
-with open(os.path.join(os.path.dirname(__file__), 'README.rst'), 'r') as f:
+with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
     readme = f.read()
 
 setup(name = 'abakaffe-cli',
