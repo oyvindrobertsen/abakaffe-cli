@@ -61,9 +61,6 @@ def abakus(args=None):
         print("Kaffetrakteren er på!")
 
     print_status(time_delta)
-    # Prints a beautiful graph displaying Abakus' coffee consumption problem
-    if args.stats:
-        abakus_stats()
 
 
 def abakus_stats():
@@ -109,6 +106,8 @@ def get_args():
 def main():
     args = get_args()
     abakus(args)
+    if args.stats:
+        abakus_stats()
     if args.online:
         online()
 
