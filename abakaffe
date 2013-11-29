@@ -89,7 +89,7 @@ def abakus_stats():
     stats = stats_json['stats']
 
     for date, value in sorted(stats.iteritems()):
-            print("%s %s %s" % (date, int(value) * u"\u2588", value))
+        print("%s %s %s" % (date, int(value) * u"\u2588", value))
 
 
 def online():
