@@ -1,109 +1,11 @@
 #!/usr/bin/python
 # -*- coding: latin-1 -*-
 from __future__ import print_function
-import os
-import urllib2
-import simplejson
-from urlparse import urljoin
-from datetime import datetime
 from argparse import ArgumentParser
-
-ASCII_ART = '''    
-    ____              _           _          __  __
-  .'    `.      /\   | |         | |        / _|/ _|
- /        \    /  \  | |__   __ _| | ____ _| |_| |_ ___
- |        |   / /\ \ | '_ \ / _` | |/ / _` |  _|  _/ _ \ 
- \        /  / ____ \| |_) | (_| |   < (_| | | | ||  __/
-  `.____.'  /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|
-'''
+from lib.abakaffe import Abakaffe
 
 
-API_URL = "http://kaffe.abakus.no/api/"
-
-
-def get_version():
-    with open(os.path.join(os.path.dirname(__file__), 'VERSION'), 'r') as f:
-        version = f.read().strip()
-    return version
-
-
-def get_file(api_base, api_module):
-    url = urljoin(api_base, api_module)
-    req = urllib2.Request(url)
-    opener = urllib2.build_opener()
-    f = opener.open(req)
-    return f
-
-
-def get_status(time_delta, organization="Abakus"):
-    message = ""
-    if int(time_delta.days):
-        message += "Det er ingen som har traktet kaffe i dag."
-    else:
-        hours = time_delta.seconds // (60 * 60)
-        minutes = (time_delta.seconds // 60) % 60
-
-        if not hours and not minutes:
-            return "Kaffen til {organization} ble nettopp traktet! \
-                    LØØØP!!!".format(organization=organization)
-
-        message += "Kaffen til {organization} ble sist traktet for ".format(
-            organization=organization)
-        if hours:
-            if hours == 1:
-                message += "én time"
-            else:
-                message += str(hours) + " timer"
-        if hours and minutes:
-            message += " og "
-        if minutes:
-            if minutes == 1:
-                message += "ett minutt "
-            else:
-                message += str(minutes) + " minutter "
-        message += "siden"
-        return message
-
-
-def abakus(args=None):
-    f = get_file(API_URL, 'status')
-    status_json = simplejson.load(f)
-    coffee = status_json['coffee']
-    on = coffee['status']
-    last_start = coffee['last_start']
-    last_start = datetime.strptime(last_start, "%Y-%m-%d %H:%M")
-    time_delta = datetime.now() - last_start
-
-    if args.ascii:
-        print(ASCII_ART)
-
-    if on:
-        print("Kaffetrakteren er på!")
-
-    print(get_status(time_delta))
-
-
-def abakus_stats():
-    f = get_file(API_URL, "stats")
-    stats_json = simplejson.load(f)
-    stats = stats_json['stats']
-
-    for date, value in sorted(stats.iteritems()):
-        print("%s %s %s" % (date, int(value) * u"\u2588", value))
-
-
-def online():
-    URL = "http://draug.online.ntnu.no/"
-    f = get_file(URL, "coffee.txt")
-
-    f.readline()
-    last_start = f.readline()
-    last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
-    time_delta = datetime.now() - last_start
-    print(get_status(time_delta, "Online"))
-
-
-def get_args():
+def get_args(a):
     parser = ArgumentParser(description="When was the coffee brewed?",
                             prog='abakaffe-cli')
     parser.add_argument('-a', '--ascii', action='store_true', default=False,
@@ -116,19 +18,20 @@ def get_args():
                         dest='online',
                         help="should I go one floor down to Online?")
     parser.add_argument('-v', '--version', action='version',
-                        version='%(prog)s ' + get_version(),
+                        version='%(prog)s ' + a.version,
                         dest='version', help='prints the abakaffe-cli version '
                                              'number')
     return parser.parse_args()
 
 
 def main():
-    args = get_args()
-    abakus(args)
+    a = Abakaffe()
+    args = get_args(a)
+    print(a.abakus(args))
     if args.stats:
-        abakus_stats()
+        print(a.abakus_stats())
     if args.online:
-        online()
+        print(a.online())
 
 if __name__ == '__main__':
     main()

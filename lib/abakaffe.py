@@ -1,5 +1,5 @@
 # -*- coding: latin-1 -*-
-from __future__ import print_function
+import os
 import urllib2
 import simplejson
 from urlparse import urljoin
@@ -13,7 +13,7 @@ class Abakaffe():
      /        \    /  \  | |__   __ _| | ____ _| |_| |_ ___
      |        |   / /\ \ | '_ \ / _` | |/ / _` |  _|  _/ _ \ 
      \        /  / ____ \| |_) | (_| |   < (_| | | | ||  __/
-      `.____.'  /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|\n
+      `.____.'  /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|
     '''
 
     ABA_API_URL = "http://kaffe.abakus.no/api/"
@@ -24,7 +24,7 @@ class Abakaffe():
         Returns the current version by reading the VERSION file distributed
         with the program.
         '''
-        with open('VERSION') as f:
+        with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
             version = f.read().strip()
         return version
 
@@ -54,8 +54,7 @@ class Abakaffe():
                 return "Kaffen til {organization} ble nettopp traktet! \
                         LØØØP!!!".format(organization=organization)
 
-            message += "Kaffen til {organization} ble sist traktet \
-                    for ".format(organization=organization)
+            message += "Kaffen til {organization} ble sist traktet for ".format(organization=organization)
             if hours:
                 if hours == 1:
                     message += "én time"
@@ -86,7 +85,7 @@ class Abakaffe():
         time_delta = datetime.now() - last_start
 
         if args.ascii:
-            message += self.ASCII_ART
+            message += self.ABA_ASCII + "\n"
 
         if on:
             message += "Kaffetrakteren er på!\n"
@@ -103,7 +102,7 @@ class Abakaffe():
         f = self.get_file(self.ABA_API_URL, 'stats')
         stats_json = simplejson.load(f)
         stats = stats_json['stats']
-        for date in reversed(sorted(stats.keys))[:7]:
+        for date in sorted(stats.keys()):
             value = int(stats[date])
             message += "%s %s %s \n" % (date, value * u"\u2588", value)
         return message
