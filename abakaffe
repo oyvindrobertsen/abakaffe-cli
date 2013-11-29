@@ -37,13 +37,13 @@ def get_file(api_base, api_module):
 
 def print_status(time_delta, organisation="Abakus"):
     if int(time_delta.days):
-        print("Ingen i %d har traktet kaffe i dag." % organisation)
+        print("Det er ingen som har traktet kaffe i dag.")
     else:
-        print("%s sin kaffe ble sist traktet for %d timer og %d minutter "
-              "siden." %
-              (organisation,
-               time_delta.seconds // (60 * 60),
-               (time_delta.seconds // 60) % 60))
+        print("Kaffe ble sist traktet for ", end="")
+    if int(time_delta.seconds) > 3600:
+        print("%d timer og " % (time_delta.seconds // 3600), end="")
+    print("%d minutter siden." % ((time_delta.seconds // 60) % 60))
+
 
 def abakus(args=None):
     f = get_file(API_URL, 'status')
