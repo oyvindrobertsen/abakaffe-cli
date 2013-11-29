@@ -35,14 +35,34 @@ def get_file(api_base, api_module):
     return f
 
 
-def print_status(time_delta, organisation="Abakus"):
+def get_status(time_delta, organization="Abakus"):
+    message = ""
     if int(time_delta.days):
-        print("Det er ingen som har traktet kaffe i dag.")
+        message += "Det er ingen som har traktet kaffe i dag."
     else:
-        print("Kaffe ble sist traktet for ", end="")
-    if int(time_delta.seconds) > 3600:
-        print("%d timer og " % (time_delta.seconds // 3600), end="")
-    print("%d minutter siden." % ((time_delta.seconds // 60) % 60))
+        hours = time_delta.seconds // (60 * 60)
+        minutes = (time_delta.seconds // 60) % 60
+
+        if not hours and not minutes:
+            return "Kaffen til {organization} ble nettopp traktet! \
+                    LØØØP!!!".format(organization=organization)
+
+        message += "Kaffen til {organization} ble sist traktet for ".format(
+            organization=organization)
+        if hours:
+            if hours == 1:
+                message += "én time"
+            else:
+                message += str(hours) + " timer"
+        if hours and minutes:
+            message += " og "
+        if minutes:
+            if minutes == 1:
+                message += "ett minutt "
+            else:
+                message += str(minutes) + " minutter "
+        message += "siden"
+        return message
 
 
 def abakus(args=None):
@@ -60,7 +80,7 @@ def abakus(args=None):
     if on:
         print("Kaffetrakteren er på!")
 
-    print_status(time_delta)
+    print(get_status(time_delta))
 
 
 def abakus_stats():
@@ -81,7 +101,7 @@ def online():
     last_start = f.readline()
     last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
     time_delta = datetime.now() - last_start
-    print_status(time_delta, "Online")
+    print(get_status(time_delta, "Online"))
 
 
 def get_args():
