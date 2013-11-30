@@ -61,7 +61,7 @@ def get_status(time_delta, organization="Abakus"):
                 message += "ett minutt "
             else:
                 message += str(minutes) + " minutter "
-        message += "siden"
+        message += "siden."
     return message
 
 
