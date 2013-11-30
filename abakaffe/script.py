@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 from __future__ import print_function
 from argparse import ArgumentParser
-from abakaffe.lib import Abakaffe
+from lib import Abakaffe
 
 
 def get_args():

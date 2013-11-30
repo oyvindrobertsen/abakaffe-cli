@@ -1,9 +1,9 @@
 # -*- coding: latin-1 -*-
-import os
 import urllib2
 import simplejson
 from urlparse import urljoin
 from datetime import datetime
+from version import __version__
 
 
 class Abakaffe():
@@ -22,12 +22,9 @@ class Abakaffe():
     @staticmethod
     def get_version():
         '''
-        Returns the current version by reading the VERSION file distributed
-        with the program.
+        Returns the current version by reading the version.py file.
         '''
-        with open(os.path.join(os.path.dirname(__file__), '../', 'VERSION')) as f:
-            version = f.read().strip()
-        return version
+        return __version__
 
     @staticmethod
     def get_file(api_base, api_module):
@@ -128,5 +125,5 @@ class Abakaffe():
         last_start = f.readline()
         last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
         time_delta = datetime.now() - last_start
-        message += Abakaffe.get_status(time_delta, "Online") + "\n"
+        message += Abakaffe.get_status(time_delta, "Online")
         return message
