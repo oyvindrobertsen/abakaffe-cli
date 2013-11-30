@@ -19,17 +19,17 @@ Mest sannsynlig har du lyst å skrive sudo foran den linja.
       `.____.'  /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|
 
     Kaffetrakteren er på!
-    Kaffen til Abakus ble sist traktet for 5 minutter siden
+    Kaffen til Abakus ble sist traktet for 5 minutter siden.
     2013-11-26 ███ 3
     2013-11-27 █████████████ 13
     2013-11-28 ████████████████ 16
     2013-11-29 ██████████████ 14
-    Kaffen til Online ble sist traktet for 3 timer og 28 minutter siden
+    Kaffen til Online ble sist traktet for 3 timer og 28 minutter siden.
 
 ## Hvilke valg har jeg?
 
     $ abakaffe --help
-    usage: abakaffe-cli [-h] [-a] [-s] [-o] [-v]
+    usage: abakaffe [-h] [-a] [-s] [-o] [-v]
 
     When was the coffee brewed?
 
