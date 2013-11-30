@@ -1,2 +1,4 @@
+-e git+https://github.com/oyvindrobertsen/abakaffe-cli.git@1193ecf05b311133e8347431e4932ba7c7c83255#egg=abakaffe_cli-refactor
+nose==1.3.0
 simplejson==3.3.1
 wsgiref==0.1.2
