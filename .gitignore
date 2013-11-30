@@ -1,5 +1,8 @@
 venv/
 
+*.pyc
+
+.DS_Store
 *~
 *.swp
 *.swo
