@@ -19,16 +19,18 @@ class Abakaffe():
     ABA_API_URL = "http://kaffe.abakus.no/api/"
     ONLINE_API_URL = "http://draug.online.ntnu.no/"
 
-    def get_version(self):
+    @staticmethod
+    def get_version():
         '''
         Returns the current version by reading the VERSION file distributed
         with the program.
         '''
-        with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
+        with open(os.path.join(os.path.dirname(__file__), '../', 'VERSION')) as f:
             version = f.read().strip()
         return version
 
-    def get_file(self, api_base, api_module):
+    @staticmethod
+    def get_file(api_base, api_module):
         '''
         Returns a file object of the server response.
         '''
@@ -38,7 +40,8 @@ class Abakaffe():
         f = opener.open(req)
         return f
 
-    def get_status(self, time_delta, organization="Abakus"):
+    @staticmethod
+    def get_status(time_delta, organization="Abakus"):
         '''
         Builds a message based on a datetime.timedelta object and an
         organization.
@@ -70,13 +73,14 @@ class Abakaffe():
             message += "siden."
         return message
 
-    def abakus(self, args=None):
+    @staticmethod
+    def abakus(args=None):
         '''
         Main Abakus function, ties together the message returned by get_status
         with other message components based on args.
         '''
         message = ""
-        f = self.get_file(self.ABA_API_URL, 'status')
+        f = Abakaffe.get_file(Abakaffe.ABA_API_URL, 'status')
         status_json = simplejson.load(f)
         coffee = status_json['coffee']
         on = coffee['status']
@@ -85,21 +89,22 @@ class Abakaffe():
         time_delta = datetime.now() - last_start
 
         if args.ascii:
-            message += self.ABA_ASCII + "\n"
+            message += Abakaffe.ABA_ASCII + "\n"
 
         if on:
             message += "Kaffetrakteren er på!\n"
 
-        message += self.get_status(time_delta)
+        message += Abakaffe.get_status(time_delta)
         return message
 
-    def abakus_stats(self):
+    @staticmethod
+    def abakus_stats():
         '''
         Returns a stats-message with a bargraph based on the Abakus coffeestats
         API node.
         '''
         message = ""
-        f = self.get_file(self.ABA_API_URL, 'stats')
+        f = Abakaffe.get_file(Abakaffe.ABA_API_URL, 'stats')
         stats_json = simplejson.load(f)
         stats = stats_json['stats']
         for date in sorted(stats.keys()):
@@ -107,13 +112,14 @@ class Abakaffe():
             message += "%s %s %s \n" % (date, value * u"\u2588", value)
         return message
 
-    def online(self):
+    @staticmethod
+    def online():
         '''
         Returns a message with info from the Online coffee API,
         total pots brewed today, and last time brewed.
         '''
         message = ""
-        f = self.get_file(self.ONLINE_API_URL, "coffee.txt")
+        f = Abakaffe.get_file(Abakaffe.ONLINE_API_URL, "coffee.txt")
         total_today = int(f.readline())
         if total_today > 0:
             message += "Online har traktet %s kanner i dag.\n" % total_today
@@ -122,8 +128,5 @@ class Abakaffe():
         last_start = f.readline()
         last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
         time_delta = datetime.now() - last_start
-        message += self.get_status(time_delta, "Online") + "\n"
+        message += Abakaffe.get_status(time_delta, "Online") + "\n"
         return message
-
-    def __init__(self):
-        self.version = self.get_version()
