@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/oyvindrobertsen/abakaffe-cli.png)
+[![Build Status](https://travis-ci.org/oyvindrobertsen/abakaffe-cli.png)](https://travis-ci.org/oyvindrobertsen/abakaffe-cli)
 
 # CLI for [kaffe.abakus.no](http://kaffe.abakus.no)
 
