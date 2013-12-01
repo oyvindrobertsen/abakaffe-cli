@@ -1,6 +1,6 @@
-![Build Status](https://travis-ci.org/oyvindrobertsen/abakaffe-cli.png)
-
 # CLI for [kaffe.abakus.no](http://kaffe.abakus.no)
+
+![Build Status](https://travis-ci.org/oyvindrobertsen/abakaffe-cli.png)
 
 ## Installasjon
 
