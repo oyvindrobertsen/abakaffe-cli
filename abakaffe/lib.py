@@ -54,7 +54,8 @@ class Abakaffe():
                 return "Kaffen til {organization} ble nettopp traktet! \
                         LØØØP!!!".format(organization=organization)
 
-            message += "Kaffen til {organization} ble sist traktet for ".format(organization=organization)
+            message += "Kaffen til {organization} ble sist traktet for "
+            message = message.format(organization=organization)
             if hours:
                 if hours == 1:
                     message += "én time"
@@ -106,7 +107,8 @@ class Abakaffe():
         stats = stats_json['stats']
         for date in sorted(stats.keys()):
             value = int(stats[date])
-            message += "%s %s %s \n" % (date, value * u"\u2588", value)
+            message += "%s %s %s\n" % (date, value * u"\u2588", value)
+        message = message.rstrip()  # Remove trailing whitespace
         return message
 
     @staticmethod
