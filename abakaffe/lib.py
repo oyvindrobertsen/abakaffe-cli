@@ -107,7 +107,10 @@ class Abakaffe():
         stats = stats_json['stats']
         for date in sorted(stats.keys()):
             value = int(stats[date])
-            message += "%s %s %s\n" % (date, value * u"\u2588", value)
+            message += u"{date} {graph} {value}\n".format(
+                date=date,
+                graph=value * u"\u2588",
+                value=value)
         message = message.rstrip()  # Remove trailing whitespace
         return message
 
@@ -121,7 +124,8 @@ class Abakaffe():
         f = Abakaffe.get_file(Abakaffe.ONLINE_API_URL, "coffee.txt")
         total_today = int(f.readline())
         if total_today > 0:
-            message += "Online har traktet %s kanner i dag.\n" % total_today
+            message += "Online har traktet {count} kanner i dag.\n".format(
+                count=total_today)
         else:
             message += "Online har ikke traktet kaffe i dag.\n"
         last_start = f.readline()
