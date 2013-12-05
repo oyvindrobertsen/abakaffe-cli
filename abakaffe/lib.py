@@ -123,13 +123,13 @@ class Abakaffe():
         message = ""
         f = Abakaffe.get_file(Abakaffe.ONLINE_API_URL, "coffee.txt")
         total_today = int(f.readline())
-        if total_today > 0:
-            message += "Online har traktet {count} kanner i dag.\n".format(
-                count=total_today)
-        else:
-            message += "Online har ikke traktet kaffe i dag.\n"
         last_start = f.readline()
         last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
-        time_delta = datetime.now() - last_start
-        message += Abakaffe.get_status(time_delta, "Online")
+        if last_start.date() == datetime.today().date() and total_today > 0:
+            message += "Online har traktet {count} kanner i dag.\n".format(
+                count=total_today)
+            time_delta = datetime.now() - last_start
+            message += Abakaffe.get_status(time_delta, "Online")
+        else:
+            message += "Online har ikke traktet kaffe i dag."
         return message
