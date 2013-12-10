@@ -105,7 +105,7 @@ class Abakaffe():
         f = Abakaffe.get_file(Abakaffe.ABA_API_URL, 'stats')
         stats_json = simplejson.load(f)
         stats = stats_json['stats']
-        for date in sorted(stats.keys()):
+        for date in sorted(stats.keys())[-5:]:
             value = int(stats[date])
             message += u"{date} {graph} {value}\n".format(
                 date=date,
