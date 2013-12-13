@@ -7,7 +7,7 @@ from lib import Abakaffe
 
 def get_args():
     parser = ArgumentParser(description="When was the coffee brewed?",
-                            prog='abakaffe-cli')
+                            prog='abakaffe')
     parser.add_argument('-a', '--ascii', action='store_true', default=False,
                         dest='ascii', help='prints the Abakaffe ascii-art')
     parser.add_argument('-s', '--stats', action='store_true', default=False,
