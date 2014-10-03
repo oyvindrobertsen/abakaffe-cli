@@ -34,7 +34,11 @@ class Abakaffe():
         url = urljoin(api_base, api_module)
         req = urllib2.Request(url)
         opener = urllib2.build_opener()
-        f = opener.open(req)
+        try:
+            f = opener.open(req)
+        except IOError:
+            print('Kunne ikke koble til %s' % api_base)
+            exit(0)
         return f
 
     @staticmethod
