@@ -8,3 +8,6 @@ venv/
 *.swo
 
 *.egg-info/
+
+.idea/
+build/

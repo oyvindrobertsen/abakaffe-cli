@@ -16,7 +16,7 @@ class Abakaffe():
       `.____.'  /_/    \_\_.__/ \__,_|_|\_\__,_|_| |_| \___|
     '''
 
-    ABA_API_URL = "http://kaffe.abakus.no/api/"
+    ABA_API_URL = "https://kaffe.abakus.no/api/"
     ONLINE_API_URL = "http://draug.online.ntnu.no/"
 
     @staticmethod
@@ -32,12 +32,13 @@ class Abakaffe():
         Returns a file object of the server response.
         '''
         url = urljoin(api_base, api_module)
-        req = urllib2.Request(url)
+        headers = {'User-Agent': 'abakaffe-cli'}
+        req = urllib2.Request(url, headers=headers)
         opener = urllib2.build_opener()
         try:
             f = opener.open(req)
         except IOError:
-            print('Kunne ikke koble til %s' % api_base)
+            print('Kunne ikke koble til %s' % url)
             exit(0)
         return f
 
