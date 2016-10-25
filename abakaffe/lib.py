@@ -1,5 +1,7 @@
 # encoding: utf-8
 from __future__ import unicode_literals
+from future.standard_library import install_aliases
+install_aliases()
 from urllib.parse import urljoin
 from urllib.request import urlopen, Request
 from urllib.error import URLError
