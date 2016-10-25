@@ -12,7 +12,7 @@ setup(name='abakaffe-cli',
       author='Øyvind Robertsen, Martin Hallén',
       author_email=['oyvindrobertsen@gmail.com', 'marthall@outlook.com'],
       url='http://github.com/oyvindrobertsen/abakaffe-cli',
-      install_requires=['simplejson', 'nose'],
+      install_requires=['simplejson', 'nose', 'future'],
       license='MIT',
       keywords='Abakus coffee API',
       )

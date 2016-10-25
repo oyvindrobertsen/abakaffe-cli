@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: latin-1 -*-
 from __future__ import print_function
+from future.standard_library import install_aliases
+
+install_aliases()
+
 from argparse import ArgumentParser
-from lib import Abakaffe
+from .lib import Abakaffe
 
 
 def get_args():

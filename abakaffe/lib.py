@@ -1,9 +1,10 @@
-# -*- coding: latin-1 -*-
-import urllib2
+# encoding: utf-8
+from __future__ import unicode_literals
+from urllib.parse import urljoin
+from urllib.request import urlopen, Request
 import simplejson
-from urlparse import urljoin
 from datetime import datetime
-from version import __version__
+from .version import __version__
 
 
 class Abakaffe():
@@ -32,15 +33,11 @@ class Abakaffe():
         Returns a file object of the server response.
         '''
         url = urljoin(api_base, api_module)
-        headers = {'User-Agent': 'abakaffe-cli'}
-        req = urllib2.Request(url, headers=headers)
-        opener = urllib2.build_opener()
-        try:
-            f = opener.open(req)
-        except IOError:
-            print('Kunne ikke koble til %s' % url)
-            exit(0)
-        return f
+        req = Request(url, headers={'User-Agent' : "Magic Browser"}) 
+        con = urlopen(req)
+        data = con.read() 
+        return data
+
 
     @staticmethod
     def get_status(time_delta, organization="Abakus"):
@@ -59,8 +56,7 @@ class Abakaffe():
                 return "Kaffen til {organization} ble nettopp traktet! \
                         LØØØP!!!".format(organization=organization)
 
-            message += "Kaffen til {organization} ble sist traktet for "
-            message = message.format(organization=organization)
+            message += "Kaffen til {organization} ble sist traktet for ".format(organization=organization)
             if hours:
                 if hours == 1:
                     message += "én time"
@@ -84,7 +80,7 @@ class Abakaffe():
         '''
         message = ""
         f = Abakaffe.get_file(Abakaffe.ABA_API_URL, 'status')
-        status_json = simplejson.load(f)
+        status_json = simplejson.loads(f)
         coffee = status_json['coffee']
         on = coffee['status']
         last_start = coffee['last_start']
@@ -108,19 +104,16 @@ class Abakaffe():
         '''
         message = ""
         f = Abakaffe.get_file(Abakaffe.ABA_API_URL, 'stats')
-        stats_json = simplejson.load(f)
+        stats_json = simplejson.loads(f)
         stats = stats_json['stats']
-        for date in sorted(stats.keys())[-5:]:
+        for date in sorted(stats.keys()):
             value = int(stats[date])
-            message += u"{date} {graph} {value}\n".format(
-                date=date,
-                graph=value * u"\u2588",
-                value=value)
-        message = message.rstrip()  # Remove trailing whitespace
+            message += "%s %s %s \n" % (date, value * u"\u2588", value)
         return message
 
     @staticmethod
     def online():
+        raise NotImplementedError
         '''
         Returns a message with info from the Online coffee API,
         total pots brewed today, and last time brewed.
@@ -128,13 +121,12 @@ class Abakaffe():
         message = ""
         f = Abakaffe.get_file(Abakaffe.ONLINE_API_URL, "coffee.txt")
         total_today = int(f.readline())
+        if total_today > 0:
+            message += "Online har traktet %s kanner i dag.\n" % total_today
+        else:
+            message += "Online har ikke traktet kaffe i dag.\n"
         last_start = f.readline()
         last_start = datetime.strptime(last_start, "%d. %B %Y %H:%M:%S")
-        if last_start.date() == datetime.today().date() and total_today > 0:
-            message += "Online har traktet {count} kanner i dag.\n".format(
-                count=total_today)
-            time_delta = datetime.now() - last_start
-            message += Abakaffe.get_status(time_delta, "Online")
-        else:
-            message += "Online har ikke traktet kaffe i dag."
+        time_delta = datetime.now() - last_start
+        message += Abakaffe.get_status(time_delta, "Online")
         return message
