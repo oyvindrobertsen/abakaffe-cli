@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from urllib.parse import urljoin
 from urllib.request import urlopen, Request
+from urllib.error import URLError
 import simplejson
 from datetime import datetime
 from .version import __version__
@@ -33,9 +34,13 @@ class Abakaffe():
         Returns a file object of the server response.
         '''
         url = urljoin(api_base, api_module)
-        req = Request(url, headers={'User-Agent' : "Magic Browser"}) 
-        con = urlopen(req)
-        data = con.read() 
+        req = Request(url, headers={'User-Agent' : "Magic Browser"})
+        try:
+            con = urlopen(req)
+            data = con.read()
+        except URLError:
+            print("Could not read data from {}".format(url))
+            exit() 
         return data
 
 
